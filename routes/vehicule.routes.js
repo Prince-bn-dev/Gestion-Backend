@@ -20,7 +20,7 @@ router.get('/:id',protect,authorizeRoles('gestionnaire') , vehiculeController.ge
 router.put('/:id',protect,authorizeRoles('gestionnaire') , vehiculeController.updateVehicule);
 router.put('/chauffeur/:id' ,protect,authorizeRoles('gestionnaire') ,vehiculeController.addChauffeurByVehicule )
 router.get('/parc/:id',protect,authorizeRoles('gestionnaire') , vehiculeController.getVehiculesByParc);
-router.get('/chauffeur/:id',protect,authorizeRoles('gestionnaire') , vehiculeController.getVehiculesByChauffeur);
+router.get('/chauffeur/:id',protect,authorizeRoles('chauffeur') , vehiculeController.getVehiculesByChauffeur);
 router.get('/gestionnaire/:id',protect,authorizeRoles('gestionnaire') , vehiculeController.getVehiculesByGestionnaire);
 router.delete('/:id', vehiculeController.deleteVehicule);
 

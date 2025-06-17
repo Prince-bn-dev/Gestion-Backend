@@ -118,6 +118,7 @@ exports.getVehiculesByChauffeur = async (req, res) => {
     const vehicules = await Vehicule.find({ chauffeur: chauffeurId })
       .populate('images')
       .populate('chauffeur')
+      .populate('gestionnaire')
       .populate('parc');
     res.status(200).json(vehicules);
   } catch (error) {

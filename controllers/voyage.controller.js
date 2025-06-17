@@ -101,3 +101,25 @@ exports.getVoyagesByGestionnaire = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 }
+
+exports.getVoyagesByChauffeurVehicule= async (req, res) =>{
+    const chauffeurId = req.params.chauffeurId;
+
+  try {
+    const vehicules = await Vehicule.find({ chauffeur: chauffeurId }).select('_id');
+    const vehiculeIds = vehicules.map(v => v._id);
+
+    if (vehiculeIds.length === 0) {
+      return res.status(404).json({ message: "Aucun véhicule assigné à ce chauffeur." });
+    }
+
+    const voyages = await Voyage.find({ vehicule: { $in: vehiculeIds } })
+      .populate('vehicule')
+      .populate('gestionnaire');
+
+    res.status(200).json(voyages);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Erreur serveur lors de la récupération des voyages." });
+  }
+}

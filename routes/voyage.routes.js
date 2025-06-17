@@ -10,5 +10,6 @@ router.get('/:id', protect,authorizeRoles('gestionnaire'),voyageController.getVo
 router.put('/:id',protect,authorizeRoles('gestionnaire'), voyageController.updateVoyage);
 router.delete('/:id',protect,authorizeRoles('gestionnaire'), voyageController.deleteVoyage);
 router.get('/gestionnaire/:gestionnaireId', protect,authorizeRoles('gestionnaire'),voyageController.getVoyagesByGestionnaire);
+router.get('/chauffeur/:chauffeurId', voyageController.getVoyagesByChauffeurVehicule);
 
 module.exports = router;
