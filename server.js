@@ -21,7 +21,9 @@ app.use(cors({
 app.use('/uploads', express.static(path.join(__dirname, 'client/uploads')));
 app.use(express.json());
 
-
+app.get('/',(req,res)=>{
+ res.send('hello')
+})
 app.use('/api/user',userRoutes)
 app.use('/api/parcs', parcRoutes);
 app.use('/api/vehicules', vehiculeRoutes);
