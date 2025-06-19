@@ -127,6 +127,7 @@ exports.login = async (req, res) => {
 
   } catch (err) {
     const errors = loginErrors(err);
+    console.log(err)
     return res.status(500).json({ errors });
   }
 };

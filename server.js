@@ -14,13 +14,24 @@ const path = require('path');
 const cors = require('cors');
 
 
-app.use(
-  cors({
-    origin: "https://gestion-frontend-lyart.vercel.app",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://gestion-frontend-lyart.vercel.app',
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+
 app.use('/uploads', express.static(path.join(__dirname, 'client/uploads')));
 app.use(express.json());
 
