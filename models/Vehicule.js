@@ -10,8 +10,8 @@ const vehiculeSchema = new mongoose.Schema({
   gps: {
     type: { type: String, enum: ['gps', 'non-gps'], default: 'non-gps' },
     localisation: {
-      lat: Number,
-      lng: Number,
+      lat: {type:Number ,default:2.245},
+      lng: {type:Number ,default:3.345},
       timestamp: Date
     }
   },
