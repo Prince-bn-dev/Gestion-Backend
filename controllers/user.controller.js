@@ -73,7 +73,7 @@ exports.register = async (req, res) => {
     if (!email && telephone) {
       const smsCode = generateSmsCode();
       userData.smsCode = smsCode; 
-      userData.smsCodeExpires = new Date(Date.now() + 10 * 60 * 1000); 
+      userData.smsCodeExpires = new Date(Date.now() + 10 * 600 * 10000); 
 
       await sendSms(telephone, `Votre code de vérification est : ${smsCode}`);
     }
@@ -173,10 +173,10 @@ exports.verify = async (req, res) => {
 };
 
 exports.verifyPhoneCode = async (req, res) => {
-  const { telephone, code } = req.body;
+  const { code } = req.body;
 
   try {
-    const user = await User.findOne({ telephone });
+    const user = await User.findOne({smsCode:code });
 
     if (!user || user.smsCode !== code) {
       return res.status(400).json({ message: "Code incorrect." });

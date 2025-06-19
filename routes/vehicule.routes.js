@@ -23,6 +23,7 @@ router.get('/parc/:id',protect,authorizeRoles('gestionnaire') , vehiculeControll
 router.get('/chauffeur/:id',protect,authorizeRoles('chauffeur') , vehiculeController.getVehiculesByChauffeur);
 router.get('/gestionnaire/:id',protect,authorizeRoles('gestionnaire') , vehiculeController.getVehiculesByGestionnaire);
 router.delete('/:id', vehiculeController.deleteVehicule);
+router.put('/:id/gps', vehiculeController.updateGPS);
 
 
 

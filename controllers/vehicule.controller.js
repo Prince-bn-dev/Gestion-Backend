@@ -126,6 +126,31 @@ exports.getVehiculesByChauffeur = async (req, res) => {
   }
 };
 
+exports.updateGPS = async (req, res) => {
+  const { lat, lng } = req.body;
+
+  try {
+    const vehicule = await Vehicule.findByIdAndUpdate(
+      req.params.id,
+      {
+        gps: {
+          type: 'gps',
+          localisation: {
+            lat,
+            lng,
+            timestamp: new Date()
+          }
+        }
+      },
+      { new: true }
+    );
+    res.status(200).json(vehicule);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur lors de la mise à jour GPS" });
+  }
+};
+
 exports.getVehiculesByGestionnaire = async (req, res) => {
   try {
     const gestionnaireId = req.params.id;

@@ -95,12 +95,22 @@ exports.deleteVoyage = async (req, res) => {
 exports.getVoyagesByGestionnaire = async (req, res) => {
   try {
     const gestionnaireId = req.params.gestionnaireId;
-    const voyages = await Voyage.find({ gestionnaire: gestionnaireId }).populate('vehicule');
+
+    const voyages = await Voyage.find({ gestionnaire: gestionnaireId })
+      .populate({
+        path: 'vehicule',
+        populate: {
+          path: 'chauffeur',
+          select: 'nom prenom' // seulement les champs utiles
+        }
+      });
+
     res.status(200).json(voyages);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
+};
+
 
 exports.getVoyagesByChauffeurVehicule= async (req, res) =>{
     const chauffeurId = req.params.chauffeurId;
