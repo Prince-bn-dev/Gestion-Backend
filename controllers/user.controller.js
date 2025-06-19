@@ -98,6 +98,8 @@ exports.login = async (req, res) => {
   const { identifiant, motDePasse } = req.body;
 
   try {
+    console.log("Tentative de connexion avec :", identifiant);
+
     const user = await User.findOne({
       $or: [
         { email: identifiant },
@@ -119,18 +121,18 @@ exports.login = async (req, res) => {
 
     const token = jwt.sign(
       { id: user._id, role: user.role },
-      JWT_SECRET,
+      process.env.JWT_SECRET, // ✅ corrigé ici
       { expiresIn: "24h" }
     );
 
     return res.status(200).json({ message: "Connexion réussie", token });
 
   } catch (err) {
-    const errors = loginErrors(err);
-    console.log(err)
-    return res.status(500).json({ errors });
+    console.error("Erreur login :", err); // ✅ log complet
+    return res.status(500).json({ message: "Erreur serveur lors de la connexion." });
   }
 };
+
 
 exports.getProfile = async (req, res) => {
   try {
