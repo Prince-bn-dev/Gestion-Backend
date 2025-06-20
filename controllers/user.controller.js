@@ -121,14 +121,14 @@ exports.login = async (req, res) => {
 
     const token = jwt.sign(
       { id: user._id, role: user.role },
-      process.env.JWT_SECRET, // ✅ corrigé ici
+      process.env.JWT_SECRET, 
       { expiresIn: "24h" }
     );
 
     return res.status(200).json({ message: "Connexion réussie", token });
 
   } catch (err) {
-    console.error("Erreur login :", err); // ✅ log complet
+    console.error("Erreur login :", err); 
     return res.status(500).json({ message: "Erreur serveur lors de la connexion." });
   }
 };
