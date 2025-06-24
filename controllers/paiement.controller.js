@@ -28,8 +28,6 @@ exports.createPaiement = async (req, res) => {
     if (error.code === 11000) {
       return res.status(409).json({ message: 'Ce kkiapay_id existe déjà.' });
     }
-
-    // Autres erreurs
     res.status(400).json({ error: error.message });
   }
 };
