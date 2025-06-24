@@ -98,8 +98,6 @@ exports.login = async (req, res) => {
   const { identifiant, motDePasse } = req.body;
 
   try {
-    console.log("Tentative de connexion avec :", identifiant);
-
     const user = await User.findOne({
       $or: [
         { email: identifiant },
