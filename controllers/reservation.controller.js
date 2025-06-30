@@ -44,7 +44,6 @@ exports.updateReservation = async (req, res) => {
 
 };
 
-
 exports.getReservationById = async (req, res) => {
   try {
     const reservation = await Reservation.findById(req.params.id)

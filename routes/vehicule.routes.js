@@ -6,10 +6,10 @@ const multer = require('multer');
 const path = require('path');
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './uploads/'); // dossier uploads à créer à la racine
+    cb(null, './uploads/'); 
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // nom unique avec extension
+    cb(null, Date.now() + path.extname(file.originalname)); 
   },
 });
 const upload = multer({ storage });

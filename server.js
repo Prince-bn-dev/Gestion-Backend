@@ -10,6 +10,7 @@ const voyageRoutes = require('./routes/voyage.routes.js');
 const reservationRoutes = require('./routes/reservation.routes.js');
 const paiementRoutes = require('./routes/paiement.routes.js');
 const commentaireRoutes = require('./routes/commentaire.routes.js');
+const trajetRoutes= require('./routes/trajet.routes.js')
 
 const path = require('path');
 const cors = require('cors');
@@ -46,6 +47,8 @@ connectDB().then(() => {
   app.use('/api/reservations', reservationRoutes);
   app.use('/api/paiements', paiementRoutes);
   app.use('/api/commentaires', commentaireRoutes);
+  app.use('/api/trajets', trajetRoutes);
+
 
   const PORT = process.env.PORT;
   app.listen(PORT, () => {

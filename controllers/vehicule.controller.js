@@ -3,7 +3,6 @@ const User = require('../models/User');
 const Parc = require('../models/Parc');
 const Image = require('../models/Image');
 
-
 exports.createVehicule = async (req, res) => {
   try {
     const {
