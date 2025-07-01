@@ -15,4 +15,4 @@ const voyageSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-module.exports = mongoose.model('voyage', voyageSchema);
+module.exports = mongoose.model('Voyage', voyageSchema);
