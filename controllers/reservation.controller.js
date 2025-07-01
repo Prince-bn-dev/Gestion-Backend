@@ -82,6 +82,9 @@ exports.getReservationByVoyageur = async (req, res) => {
           populate: {
             path: 'parc'
           }
+        },
+         populate: {
+          path: 'trajet',
         }
       })
       .populate('voyageur', 'nom  prenom email')
