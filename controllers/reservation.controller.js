@@ -77,15 +77,17 @@ exports.getReservationByVoyageur = async (req, res) => {
     const reservations = await Reservation.find({ voyageur: req.params.voyageurId })
       .populate({
         path: 'voyage',
-        populate: {
-          path: 'vehicule',
-          populate: {
-            path: 'parc'
+        populate: [
+          {
+            path: 'vehicule',
+            populate: {
+              path: 'parc'
+            }
+          },
+          {
+            path: 'trajet'
           }
-        },
-         populate: {
-          path: 'trajet',
-        }
+        ]
       })
       .populate('voyageur', 'nom  prenom email')
       .populate('paiement');
