@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
   emailToken: { type: String },
   resetPasswordToken: { type: String },
   actif: { type: Boolean, default: true },
-  image: { type: String, default: 'default-avatar.png' }
+  image: { type: String, default: 'uploads/profil/default-avatar.png' }
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);
