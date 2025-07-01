@@ -43,7 +43,10 @@ exports.createVoyage = async (req, res) => {
 exports.getAllVoyages = async (req, res) => {
   try {
     const voyages = await Voyage.find()
-      .populate('vehicule')
+       .populate({
+          path: 'vehicule',
+          populate: { path: 'chauffeur' }
+        })
       .populate('trajet')
       .populate('gestionnaire', 'nom prenom');
     res.status(200).json(voyages);
