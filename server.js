@@ -32,7 +32,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use('/uploads', express.static(path.join(__dirname, 'client/uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'client/uploads/')));
 app.use(express.json());
 
 app.get('/', (req, res) => {
