@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/user.controller');
 const uploadController = require('../controllers/upload.controller');
-const { protect ,authorizeRoles} = require('../middlewares/authMiddleware');
+const { protect } = require('../middlewares/authMiddleware');
 const multer = require("multer");
 
 const storage = multer.memoryStorage();

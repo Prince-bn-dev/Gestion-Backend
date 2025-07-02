@@ -75,13 +75,15 @@ const vehiculeErrors = (err) => {
 const uploadErrors = (err) => {
   let errors = { format: '', maxSize: '' };
 
-  const message = typeof err === 'string' ? err : err.message;
+  const message = err?.message || (typeof err === 'string' ? err : '');
 
-  if (message.includes('invalid file'))
-    errors.format = 'Format incompatible';
+  if (message.includes('invalid file')) {
+    errors.format = 'Format incompatible. Seuls les formats jpg, jpeg et png sont autorisés.';
+  }
 
-  if (message.includes('max size'))
-    errors.maxSize = 'Le fichier dépasse 500ko';
+  if (message.includes('max size')) {
+    errors.maxSize = 'Le fichier dépasse la taille autorisée de 500ko.';
+  }
 
   return errors;
 };
