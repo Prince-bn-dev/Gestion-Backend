@@ -73,20 +73,36 @@ const vehiculeErrors = (err) => {
 }
 
 const uploadErrors = (err) => {
-  let errors = { format: '', maxSize: '' };
+  let errors = {
+    format: '',
+    maxSize: '',
+    general: ''
+  };
 
-  const message = err?.message || (typeof err === 'string' ? err : '');
+  const message =
+    typeof err === 'string' ? err :
+    err?.message || '';
+
+  console.log("🔍 uploadErrors - message reçu :", message);
 
   if (message.includes('invalid file')) {
-    errors.format = 'Format incompatible. Seuls les formats jpg, jpeg et png sont autorisés.';
+    errors.format = 'Format incompatible. Seuls les formats JPG, JPEG et PNG sont autorisés.';
   }
 
   if (message.includes('max size')) {
-    errors.maxSize = 'Le fichier dépasse la taille autorisée de 500ko.';
+    errors.maxSize = 'Le fichier dépasse la taille maximale autorisée (500ko).';
+  }
+
+  if (message.includes('no file')) {
+    errors.format = 'Aucun fichier n’a été envoyé.';
+  }
+
+  // Cas de message vide ou erreur inattendue
+  if (!errors.format && !errors.maxSize) {
+    errors.general = 'Erreur inconnue lors de l’envoi du fichier.';
   }
 
   return errors;
 };
-
 
 module.exports = { registerErrors, loginErrors  , vehiculeErrors ,uploadErrors};
