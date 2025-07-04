@@ -1,6 +1,20 @@
+const moment = require('moment');
 const Voyage = require('../models/Voyage');
 const Vehicule = require('../models/Vehicule');
 const Trajet = require('../models/Trajet');
+
+
+
+function convertDureeToMinutes(dureeStr) {
+  const regex = /(?:(\d+)h)?\s*(?:(\d+)min)?/i;
+  const match = regex.exec(dureeStr);
+  if (!match) return 0;
+
+  const hours = parseInt(match[1] || "0", 10);
+  const minutes = parseInt(match[2] || "0", 10);
+
+  return hours * 60 + minutes;
+}
 
 exports.createVoyage = async (req, res) => {
   try {
@@ -9,7 +23,6 @@ exports.createVoyage = async (req, res) => {
       trajet,
       date_depart,
       heure_depart,
-      heure_arrivee_Estime,
       prix_par_place,
       statut
     } = req.body;
@@ -22,7 +35,6 @@ exports.createVoyage = async (req, res) => {
 
     const today = new Date();
     const selectedDate = new Date(date_depart);
-
     today.setHours(0, 0, 0, 0);
     selectedDate.setHours(0, 0, 0, 0);
 
@@ -30,27 +42,18 @@ exports.createVoyage = async (req, res) => {
       return res.status(400).json({ error: "La date de départ ne peut pas être dans le passé." });
     }
 
-    const heureDepart = heure_depart.split(':').map(Number); 
-    const heureArrivee = heure_arrivee_Estime.split(':').map(Number); 
+    const dureeEnMinutes = convertDureeToMinutes(foundTrajet.duree);
 
-    const dateHeureDepart = new Date();
-    dateHeureDepart.setHours(heureDepart[0], heureDepart[1], 0);
-
-    const dateHeureArrivee = new Date();
-    dateHeureArrivee.setHours(heureArrivee[0], heureArrivee[1], 0);
-
-    if (dateHeureDepart >= dateHeureArrivee) {
-      return res.status(400).json({
-        error: "L'heure de départ doit être inférieure à l'heure d'arrivée estimée."
-      });
-    }
+    const heureArriveeEstimee = moment(`${date_depart}T${heure_depart}`)
+      .add(dureeEnMinutes, 'minutes')
+      .format('HH:mm');
 
     const newVoyage = new Voyage({
       vehicule,
       trajet,
       date_depart,
       heure_depart,
-      heure_arrivee_Estime,
+      heure_arrivee_Estime: heureArriveeEstimee,
       prix_par_place,
       statut,
       gestionnaire: req.user.id
@@ -59,6 +62,7 @@ exports.createVoyage = async (req, res) => {
     const savedVoyage = await newVoyage.save();
     res.status(201).json(savedVoyage);
   } catch (error) {
+    console.error(error);
     res.status(400).json({ error: error.message });
   }
 };
