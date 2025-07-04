@@ -2,8 +2,8 @@ const Trajet = require('../models/Trajet');
 
 exports.createTrajet = async (req, res) => {
   try {
-    const { lieux_depart, lieux_arrive } = req.body;
-    const trajet = await Trajet.create({ lieux_depart, lieux_arrive });
+    const { lieux_depart, lieux_arrive ,distance } = req.body;
+    const trajet = await Trajet.create({ lieux_depart, lieux_arrive ,distance });
     res.status(201).json(trajet);
   } catch (err) {
     res.status(500).json({ message: 'Erreur lors de la création', error: err.message });
@@ -33,10 +33,10 @@ exports.getTrajetById = async (req, res) => {
 
 exports.updateTrajet = async (req, res) => {
   try {
-    const { lieux_depart, lieux_arrive } = req.body;
+    const { lieux_depart, lieux_arrive , distance } = req.body;
     const trajet = await Trajet.findByIdAndUpdate(
       req.params.id,
-      { lieux_depart, lieux_arrive },
+      { lieux_depart, lieux_arrive ,distance },
       { new: true }
     );
     if (!trajet) return res.status(404).json({ message: 'Trajet introuvable' });

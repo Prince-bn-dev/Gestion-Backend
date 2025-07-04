@@ -2,7 +2,6 @@ const Voyage = require('../models/Voyage');
 const Vehicule = require('../models/Vehicule');
 const Trajet = require('../models/Trajet');
 
-
 exports.createVoyage = async (req, res) => {
   try {
     const {
@@ -21,6 +20,31 @@ exports.createVoyage = async (req, res) => {
     const foundTrajet = await Trajet.findById(trajet);
     if (!foundTrajet) return res.status(404).json({ error: "Trajet introuvable" });
 
+    const today = new Date();
+    const selectedDate = new Date(date_depart);
+
+    today.setHours(0, 0, 0, 0);
+    selectedDate.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      return res.status(400).json({ error: "La date de départ ne peut pas être dans le passé." });
+    }
+
+    const heureDepart = heure_depart.split(':').map(Number); 
+    const heureArrivee = heure_arrivee_Estime.split(':').map(Number); 
+
+    const dateHeureDepart = new Date();
+    dateHeureDepart.setHours(heureDepart[0], heureDepart[1], 0);
+
+    const dateHeureArrivee = new Date();
+    dateHeureArrivee.setHours(heureArrivee[0], heureArrivee[1], 0);
+
+    if (dateHeureDepart >= dateHeureArrivee) {
+      return res.status(400).json({
+        error: "L'heure de départ doit être inférieure à l'heure d'arrivée estimée."
+      });
+    }
+
     const newVoyage = new Voyage({
       vehicule,
       trajet,
@@ -38,6 +62,7 @@ exports.createVoyage = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
 
 
 exports.getAllVoyages = async (req, res) => {
