@@ -2,6 +2,7 @@ const Vehicule = require('../models/Vehicule');
 const User = require('../models/User');
 const Parc = require('../models/Parc');
 const Image = require('../models/Image');
+const { uploadErrors} = require('../Utils/error')
 
 exports.createVehicule = async (req, res) => {
   try {
@@ -168,23 +169,34 @@ exports.getVehiculesByGestionnaire = async (req, res) => {
 exports.uploadVehiculeImage = async (req, res) => {
   try {
     const { vehiculeId } = req.params;
-    const vehicule = await Vehicule.findById(vehiculeId);
-    if (!vehicule) return res.status(404).json({ error: 'Véhicule non trouvé' });
 
+    if (!req.file) {
+      throw new Error("Aucun fichier reçu");
+    }
+
+    const vehicule = await Vehicule.findById(vehiculeId);
+    if (!vehicule) {
+      return res.status(404).json({ error: 'Véhicule non trouvé' });
+    }
     const newImage = new Image({
-      url: `/uploads/${req.file.filename}`,
+      url: req.file.path,
       vehicule: vehicule._id,
     });
-    await newImage.save();
 
+    await newImage.save();
     vehicule.images.push(newImage._id);
     await vehicule.save();
 
-    res.status(201).json(newImage);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(201).json({
+      message: "Image du véhicule enregistrée avec succès.",
+      image: newImage,
+    });
+  } catch (error) {
+    console.error("Erreur uploadVehiculeImage :", error.message);
+    const err = uploadErrors ? uploadErrors(error) : error.message;
+    res.status(400).json({ error: err });
   }
-}
+};
 
 exports.addChauffeurByVehicule = async (req, res) => {
   try {

@@ -2,13 +2,20 @@ const Trajet = require('../models/Trajet');
 
 exports.createTrajet = async (req, res) => {
   try {
-    const { lieux_depart, lieux_arrive ,distance ,duree } = req.body;
-    const trajet = await Trajet.create({ lieux_depart, lieux_arrive ,distance ,duree });
+    const { lieux_depart, lieux_arrive, distance, duree } = req.body;
+
+    const existingTrajet = await Trajet.findOne({ lieux_depart, lieux_arrive });
+    if (existingTrajet) {
+      return res.status(400).json({ message: "Ce trajet existe déjà." });
+    }
+
+    const trajet = await Trajet.create({ lieux_depart, lieux_arrive, distance, duree });
     res.status(201).json(trajet);
   } catch (err) {
     res.status(500).json({ message: 'Erreur lors de la création', error: err.message });
   }
 };
+
 
 
 exports.getAllTrajets = async (req, res) => {
