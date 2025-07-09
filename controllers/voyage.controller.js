@@ -164,3 +164,18 @@ exports.getVoyagesByChauffeurVehicule = async (req, res) => {
     res.status(500).json({ message: "Erreur serveur lors de la récupération des voyages." });
   }
 };
+
+exports.getVoyagesByTrajet = async (req, res) => {
+  const { trajetId } = req.params;
+
+  try {
+    const voyages = await Voyage.find({ trajet: trajetId })
+      .populate('vehicule')
+      .populate('gestionnaire');
+
+    res.status(200).json(voyages);
+  } catch (error) {
+    console.error("Erreur lors de la récupération des voyages :", error);
+    res.status(500).json({ error: "Erreur serveur lors de la récupération des voyages pour ce trajet" });
+  }
+};
