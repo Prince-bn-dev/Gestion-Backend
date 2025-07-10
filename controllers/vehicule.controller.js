@@ -3,6 +3,8 @@ const User = require('../models/User');
 const Parc = require('../models/Parc');
 const Image = require('../models/Image');
 const { uploadErrors} = require('../Utils/error')
+const fs = require("fs");
+const path = require("path");
 
 exports.createVehicule = async (req, res) => {
   try {
@@ -195,6 +197,33 @@ exports.uploadVehiculeImage = async (req, res) => {
     console.error("Erreur uploadVehiculeImage :", error.message);
     const err = uploadErrors ? uploadErrors(error) : error.message;
     res.status(400).json({ error: err });
+  }
+};
+
+exports.deleteVehiculeImage = async (req, res) => {
+  try {
+    const { imageId, vehiculeId } = req.params;
+
+    const image = await Image.findById(imageId);
+    if (!image) {
+      return res.status(404).json({ error: "Image non trouvée" });
+    }
+
+    await Vehicule.findByIdAndUpdate(vehiculeId, {
+      $pull: { images: image._id },
+    });
+
+    const imagePath = path.join(__dirname, "..", image.url);
+    fs.unlink(imagePath, (err) => {
+      if (err) console.warn("Fichier non supprimé :", err.message);
+    });
+
+    await image.deleteOne();
+
+    res.status(200).json({ message: "Image supprimée avec succès" });
+  } catch (error) {
+    console.error("Erreur deleteVehiculeImage :", error.message);
+    res.status(500).json({ error: error.message });
   }
 };
 

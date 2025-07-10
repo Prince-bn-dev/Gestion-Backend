@@ -19,6 +19,10 @@ router.put('/:id/gps', vehiculeController.updateGPS);
 
 
 router.post('/:vehiculeId/images', upload ,  vehiculeController.uploadVehiculeImage);
+router.delete(
+  "/vehicules/:vehiculeId/images/:imageId",
+  vehiculeController.deleteVehiculeImage
+);
 
 
 module.exports = router;
